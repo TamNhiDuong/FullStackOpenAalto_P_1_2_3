@@ -18,6 +18,8 @@ const App = () => {
     setBad(bad + 1)
   }
 
+  const total = good + neutral + bad
+
   return (
     <div>
       <h1>give feedback</h1>
@@ -27,17 +29,31 @@ const App = () => {
 
       <h1>statistics</h1>
 
-      <div style={{display: 'flex', flexDirection: 'row'}}>
-        <p style={{marginRight: 10}}>good</p>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <p style={{ marginRight: 10 }}>good</p>
         <p>{good}</p>
       </div>
-      <div style={{display: 'flex', flexDirection: 'row'}}>
-        <p style={{marginRight: 10}}>neutral</p>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <p style={{ marginRight: 10 }}>neutral</p>
         <p>{neutral}</p>
       </div>
-      <div style={{display: 'flex', flexDirection: 'row'}}>
-        <p style={{marginRight: 10}}>bad</p>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <p style={{ marginRight: 10 }}>bad</p>
         <p>{bad}</p>
+      </div>
+      
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <p style={{ marginRight: 10 }}>all</p>
+        <p>{total}</p>
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <p style={{ marginRight: 10 }}>average</p>
+        {total !== 0 && <p>{(good + neutral * 0 - bad) / total}</p>}
+      </div>
+
+      <div style={{display: 'flex', flexDirection: 'row'}}>
+        <p style={{marginRight: 10}}>positive</p>
+        {total !== 0 && <p>{good*100/(total) + ' %'}</p>}
       </div>
 
 
