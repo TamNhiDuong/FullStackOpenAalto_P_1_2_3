@@ -1,5 +1,15 @@
 import { useState } from 'react'
 
+const Button = ({ handleClick, text }) => (
+  <button onClick={handleClick}>
+    {text}
+  </button>
+)
+
+const StatisticLine = ({ text, value }) => (
+  <p>{text + ' ' + value}</p>
+)
+
 const Statistics = ({ good, neutral, bad, total }) => {
   return (
     <>
@@ -8,31 +18,13 @@ const Statistics = ({ good, neutral, bad, total }) => {
       {(good !== 0 || neutral !== 0 || bad !== 0) ?
 
         <div>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <p style={{ marginRight: 10 }}>good</p>
-            <p>{good}</p>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <p style={{ marginRight: 10 }}>neutral</p>
-            <p>{neutral}</p>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <p style={{ marginRight: 10 }}>bad</p>
-            <p>{bad}</p>
-          </div>
+          <StatisticLine text="good" value={good} />
+          <StatisticLine text="neutral" value={neutral} />
+          <StatisticLine text="bad" value={bad} />
 
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <p style={{ marginRight: 10 }}>all</p>
-            <p>{total}</p>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <p style={{ marginRight: 10 }}>average</p>
-            {total !== 0 && <p>{(good + neutral * 0 - bad) / total}</p>}
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <p style={{ marginRight: 10 }}>positive</p>
-            {total !== 0 && <p>{good * 100 / (total) + ' %'}</p>}
-          </div>
+          <StatisticLine text="all" value={total} />
+          <StatisticLine text="average" value={(good + neutral * 0 - bad) / total} />
+          <StatisticLine text="positive" value={good * 100 / (total) + ' %'} />
         </div>
         : <p>No feedback given</p>
       }
@@ -63,10 +55,9 @@ const App = () => {
   return (
     <div>
       <h1>give feedback</h1>
-      <button onClick={addGood}>good</button>
-      <button onClick={addNeutral}>neutral</button>
-      <button onClick={addBad}>bad</button>
-
+      <Button handleClick={addGood} text={'good'} />
+      <Button handleClick={addNeutral} text={'neutral'} />
+      <Button handleClick={addBad} text={'bad'} />
 
       <Statistics good={good} neutral={neutral} bad={bad} total={total} />
 
