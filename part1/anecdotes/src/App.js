@@ -11,9 +11,10 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-   
+
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(new Uint8Array(8))
+  const [mostVotedIndex, setMostVotedIndex] = useState(0)
 
   const getRandomNum = () => {
     const randomNum = Math.floor(Math.random() * 8)
@@ -24,14 +25,28 @@ const App = () => {
     const clonedPoints = [...points]
     clonedPoints[selected] += 1
     setPoints(clonedPoints)
+
+    // get most voted anecdote
+    clonedPoints.forEach((v, i) => {
+      if (v > points[mostVotedIndex]) setMostVotedIndex(i)
+    })
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>{'has ' + points[selected] + ' votes'}</p>
       <button onClick={vote}>vote</button>
       <button onClick={getRandomNum}>next anecdotes</button>
+      <h1>Anecdote with most vote</h1>
+
+      {(mostVotedIndex !== 0 || (mostVotedIndex === 0 && points[mostVotedIndex] !== 0)) &&
+        <div>
+          <p>{anecdotes[mostVotedIndex]}</p>
+          <p>{'has ' + points[mostVotedIndex] + ' votes'}</p>
+        </div>
+      }
     </div>
   )
 }
