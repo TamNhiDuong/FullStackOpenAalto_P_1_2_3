@@ -1,15 +1,10 @@
 const Header = ({ course }) => <h1>{course}</h1>
 
 const Total = ({ parts }) => {
-  const getSum = () => {
-    let sum = 0
-    parts.forEach(part => {
-      sum = sum + part.exercises
-    })
-    return sum
-  }
 
-  return <p>Total of {getSum()} exercises</p>
+  const sum = parts.reduce((acc, obj) => acc + obj.exercises, 0)
+
+  return <p>Total of {sum} exercises</p>
 }
 
 const Part = ({ part }) =>
