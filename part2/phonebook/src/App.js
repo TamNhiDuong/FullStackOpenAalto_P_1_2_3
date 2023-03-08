@@ -4,7 +4,7 @@ import _ from 'lodash'
 const Person = (props) => {
   const { person } = props
   return (
-    <p>{person.name}</p>
+    <p>{person.name} {person.phoneNumber}</p>
   )
 }
 
@@ -13,21 +13,27 @@ const App = () => {
     { name: 'Arto Hellas' }
   ])
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const handleChange = (e) => {
     setNewName(e.target.value)
   }
 
+  const handleNumberChange = (e) => {
+    setNewNumber(e.target.value)
+  }
+
   const addNote = (e) => {
     e.preventDefault()
 
-    const newPerson = { name: newName }
+    const newPersonContact = { name: newName, phoneNumber: newNumber }
     // Check duplicated name
-    const dublicatedNames = persons.filter(p => _.isEqual(newPerson, p))
+    const dublicatedNames = persons.filter(p => _.isEqual(newPersonContact, p))
 
     if (dublicatedNames.length <= 0) {
-      setPersons(persons.concat(newPerson))
+      setPersons(persons.concat(newPersonContact))
       setNewName('')
+      setNewNumber('')
     } else {
       alert(`${newName} is already added to phonebook`)
     }
@@ -37,9 +43,8 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={addNote}>
-        <div>
-          name: <input onChange={handleChange} value={newName} />
-        </div>
+        <div>name: <input onChange={handleChange} value={newName} /></div>
+        <div>number: <input onChange={handleNumberChange} value={newNumber}/></div>
         <div>
           <button type="submit">add</button>
         </div>
