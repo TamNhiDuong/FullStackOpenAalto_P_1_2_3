@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import _ from 'lodash'
 
 const Person = (props) => {
   const { person } = props
@@ -19,9 +20,17 @@ const App = () => {
 
   const addNote = (e) => {
     e.preventDefault()
+
     const newPerson = { name: newName }
-    setPersons(persons.concat(newPerson))
-    setNewName('')
+    // Check duplicated name
+    const dublicatedNames = persons.filter(p => _.isEqual(newPerson, p))
+
+    if (dublicatedNames.length <= 0) {
+      setPersons(persons.concat(newPerson))
+      setNewName('')
+    } else {
+      alert(`${newName} is already added to phonebook`)
+    }
   }
 
   return (
