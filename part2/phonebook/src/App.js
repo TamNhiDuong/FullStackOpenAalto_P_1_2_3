@@ -33,7 +33,7 @@ const ContactList = (props) => {
   const { filteredList } = props
   return (
     <ul>
-      {filteredList.map(person => <Person person={person} key={person.name} />)}
+      {filteredList.map(person => <Person person={person} key={person.id} />)}
     </ul>
   )
 }
@@ -68,9 +68,14 @@ const App = () => {
     const dublicatedNames = persons.filter(p => _.isEqual(newPersonContact, p))
 
     if (dublicatedNames.length <= 0) {
-      setPersons(persons.concat(newPersonContact))
-      setNewName('')
-      setNewNumber('')
+      axios
+        .post('http://localhost:3001/persons', newPersonContact)
+        .then(res => {
+          console.log('res: ', res)
+          setPersons(persons.concat(res.data))
+          setNewName('')
+          setNewNumber('')
+        })
     } else {
       alert(`${newName} is already added to phonebook`)
     }
