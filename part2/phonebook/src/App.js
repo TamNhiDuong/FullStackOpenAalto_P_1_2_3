@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import _ from 'lodash'
 import axios from 'axios'
 
+import personServices from './services/persons'
+
 const Person = (props) => {
   const { person } = props
   return (
@@ -45,11 +47,7 @@ const App = () => {
   const [filterWord, setFilterWord] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
+    personServices.getAll().then(res => setPersons(res))
   }, [])
 
   const handleChange = (e) => {
@@ -68,14 +66,11 @@ const App = () => {
     const dublicatedNames = persons.filter(p => _.isEqual(newPersonContact, p))
 
     if (dublicatedNames.length <= 0) {
-      axios
-        .post('http://localhost:3001/persons', newPersonContact)
-        .then(res => {
-          console.log('res: ', res)
-          setPersons(persons.concat(res.data))
-          setNewName('')
-          setNewNumber('')
-        })
+      personServices.create(newPersonContact).then(res => {
+        setPersons(persons.concat(res))
+        setNewName('')
+        setNewNumber('')
+      })
     } else {
       alert(`${newName} is already added to phonebook`)
     }
