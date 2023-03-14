@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react'
 import _ from 'lodash'
-import axios from 'axios'
 
 import personServices from './services/persons'
 
 const Person = (props) => {
-  const { person } = props
+  const { person, deletePerson } = props
   return (
-    <p>{person.name} {person.number}</p>
+    <>
+      <p>{person.name} {person.number}</p>
+      <button onClick={() => deletePerson(person)}>Delete</button>
+    </>
   )
 }
 
@@ -32,10 +34,10 @@ const Filter = (props) => {
 }
 
 const ContactList = (props) => {
-  const { filteredList } = props
+  const { filteredList, deletePerson } = props
   return (
     <ul>
-      {filteredList.map(person => <Person person={person} key={person.id} />)}
+      {filteredList.map(person => <Person person={person} key={person.id} deletePerson={deletePerson} />)}
     </ul>
   )
 }
@@ -80,6 +82,15 @@ const App = () => {
     setFilterWord(e.target.value)
   }
 
+  const deletePerson = (person) => {
+    if (window.confirm("Do you really want to delete " + person.name + "?")) {
+      personServices.deletePerson(person).then(res => {
+        // Reload
+        personServices.getAll().then(res => setPersons(res))
+      })
+    }
+  }
+
   const filteredList = persons.filter(p => p.name.toLowerCase().includes(filterWord.toLowerCase()))
 
   return (
@@ -99,7 +110,7 @@ const App = () => {
         newNumber={newNumber} />
 
       <h3>Numbers</h3>
-      <ContactList filteredList={filteredList} />
+      <ContactList filteredList={filteredList} deletePerson={deletePerson} />
     </div>
   )
 }
