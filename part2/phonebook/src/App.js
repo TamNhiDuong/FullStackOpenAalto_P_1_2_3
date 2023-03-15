@@ -65,16 +65,25 @@ const App = () => {
 
     const newPersonContact = { name: newName, number: newNumber }
     // Check duplicated name
-    const dublicatedNames = persons.filter(p => _.isEqual(newPersonContact, p))
+    const duplicatedNames = persons.filter(p => p.name === newPersonContact.name)
 
-    if (dublicatedNames.length <= 0) {
+    if (duplicatedNames.length > 0) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with the new one?`)) {
+        const duplicatedContact = duplicatedNames[0]
+        duplicatedContact.number = newPersonContact.number
+        personServices.updateNumber(duplicatedContact).then(res => {
+          // Reload
+          personServices.getAll().then(res => setPersons(res))
+          setNewName('')
+          setNewNumber('')
+        })
+      }
+    } else {
       personServices.create(newPersonContact).then(res => {
         setPersons(persons.concat(res))
         setNewName('')
         setNewNumber('')
       })
-    } else {
-      alert(`${newName} is already added to phonebook`)
     }
   }
 
