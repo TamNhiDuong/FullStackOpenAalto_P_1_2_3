@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import _ from 'lodash'
+import './index.css'
 
 import personServices from './services/persons'
 
@@ -14,9 +14,9 @@ const Person = (props) => {
 }
 
 const Form = (props) => {
-  const { addNote, handleChange, newName, handleNumberChange, newNumber } = props
+  const { addContact, handleChange, newName, handleNumberChange, newNumber } = props
   return (
-    <form onSubmit={addNote}>
+    <form onSubmit={addContact}>
       <div>name: <input onChange={handleChange} value={newName} /></div>
       <div>number: <input onChange={handleNumberChange} value={newNumber} /></div>
       <div>
@@ -42,11 +42,24 @@ const ContactList = (props) => {
   )
 }
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='message'>
+      {message}
+    </div>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterWord, setFilterWord] = useState('')
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     personServices.getAll().then(res => setPersons(res))
@@ -60,7 +73,7 @@ const App = () => {
     setNewNumber(e.target.value)
   }
 
-  const addNote = (e) => {
+  const addContact = (e) => {
     e.preventDefault()
 
     const newPersonContact = { name: newName, number: newNumber }
@@ -76,6 +89,14 @@ const App = () => {
           personServices.getAll().then(res => setPersons(res))
           setNewName('')
           setNewNumber('')
+
+          // Notification
+          setMessage(
+            `Changed number to contact '${newName}'`
+          )
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
         })
       }
     } else {
@@ -83,6 +104,14 @@ const App = () => {
         setPersons(persons.concat(res))
         setNewName('')
         setNewNumber('')
+
+        // Notification
+        setMessage(
+          `Added contact '${newName}'`
+        )
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
       })
     }
   }
@@ -106,13 +135,15 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
 
+      <Notification message={message} />
+
       <Filter
         handleFilterChange={handleFilterChange}
         filterWord={filterWord} />
 
       <h3>Add a new</h3>
       <Form
-        addNote={addNote}
+        addContact={addContact}
         handleChange={handleChange}
         newName={newName}
         handleNumberChange={handleNumberChange}
