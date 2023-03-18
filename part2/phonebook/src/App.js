@@ -3,56 +3,10 @@ import './index.css'
 
 import personServices from './services/persons'
 
-const Person = (props) => {
-  const { person, deletePerson } = props
-  return (
-    <>
-      <p>{person.name} {person.number}</p>
-      <button onClick={() => deletePerson(person)}>Delete</button>
-    </>
-  )
-}
-
-const Form = (props) => {
-  const { addContact, handleChange, newName, handleNumberChange, newNumber } = props
-  return (
-    <form onSubmit={addContact}>
-      <div>name: <input onChange={handleChange} value={newName} /></div>
-      <div>number: <input onChange={handleNumberChange} value={newNumber} /></div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
-  )
-}
-
-const Filter = (props) => {
-  const { handleFilterChange, filterWord } = props
-  return (
-    <div>filter show with: <input onChange={handleFilterChange} value={filterWord} /></div>
-  )
-}
-
-const ContactList = (props) => {
-  const { filteredList, deletePerson } = props
-  return (
-    <ul>
-      {filteredList.map(person => <Person person={person} key={person.id} deletePerson={deletePerson} />)}
-    </ul>
-  )
-}
-
-const Notification = ({ message, isError }) => {
-  if (message === null) {
-    return null
-  }
-
-  return (
-    <div className={isError ? 'error-message' : 'message'}>
-      {message}
-    </div>
-  )
-}
+import ContactList from './components/ContactList'
+import Notification from './components/Notification'
+import Filter from './components/Filter'
+import Form from './components/Form'
 
 const App = () => {
   const [persons, setPersons] = useState([])
