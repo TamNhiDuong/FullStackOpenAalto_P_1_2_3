@@ -3,7 +3,30 @@ import axios from 'axios'
 
 const baseUrl = 'https://restcountries.com/v3.1/all'
 
+const Weather = ({ country }) => {
+  const [weatherData, setWeatherData] = useState(null)
+
+  const capital = country.capital[0]
+  useEffect(() => {
+    const url = `${process.env.REACT_APP_API_URL}/weather?q=${capital}&APPID=${process.env.REACT_APP_API_KEY}&units=metric`
+    axios.get(url).then(res => {
+      console.log('res: ', res)
+      setWeatherData(res)
+    })
+  }, [country])
+
+  return weatherData && (
+    <>
+      <h3>Weather in {capital}</h3>
+      <p>Temperature: {weatherData.data.main.temp} Celcius</p>
+      <img src={`${process.env.REACT_APP_ICON_URL}/${weatherData.data.weather[0].icon}.png`} alt={country.flags.alt} />
+      <p>Wind: {weatherData.data.wind.speed} m/s</p>
+    </>
+  )
+}
+
 const Country = ({ country }) => {
+
   return (
     <>
       <h1>{country.name.common}</h1>
@@ -14,6 +37,7 @@ const Country = ({ country }) => {
         {Object.keys(country.languages).map(k => <li key={k}>{country.languages[k]}</li>)}
       </div>
       <img src={country.flags.png} alt={country.flags.alt} />
+      <Weather country={country} />
     </>
   )
 }
