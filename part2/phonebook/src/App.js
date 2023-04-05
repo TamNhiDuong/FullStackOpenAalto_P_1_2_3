@@ -42,7 +42,7 @@ const App = () => {
 
         personServices.updateNumber(duplicatedContact).then(res => {
           // Update list
-          const newPersonList = persons.map(p => p.name !== newName ? p : newPersonContact)
+          const newPersonList = persons.map(p => p.name !== newName ? p : res)
           setPersons(newPersonList)
           setNewName('')
           setNewNumber('')
@@ -100,7 +100,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Phonebook</h1>
+      <h1>Phonebook- Deployment</h1>
 
       <Notification message={message} isError={isError}/>
 
