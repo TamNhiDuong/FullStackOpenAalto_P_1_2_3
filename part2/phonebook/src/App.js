@@ -28,6 +28,15 @@ const App = () => {
     setNewNumber(e.target.value)
   }
 
+  const showMessage = (isErr, msg) => {
+    // Notification
+    setMessage(msg)
+    setIsError(isErr)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
+  }
+
   const addContact = (e) => {
     e.preventDefault()
 
@@ -48,11 +57,7 @@ const App = () => {
           setNewNumber('')
 
           // Notification
-          setMessage(`Changed number to contact '${newName}'`)
-          setIsError(false)
-          setTimeout(() => {
-            setMessage(null)
-          }, 5000)
+          showMessage(false, `Changed number to contact '${newName}'`)
         })
       }
     } else {
@@ -63,11 +68,9 @@ const App = () => {
         setNewNumber('')
 
         // Notification
-        setMessage(`Added contact '${newName}'`)
-        setIsError(false)
-        setTimeout(() => {
-          setMessage(null)
-        }, 5000)
+        showMessage(false, `Added contact '${newName}'`)
+      }).catch(error => {
+        showMessage(true, error.response.data.error)
       })
     }
   }
@@ -84,11 +87,7 @@ const App = () => {
         setPersons(newPersonList)
       }).catch(error => {
         // Notification
-        setMessage(`'${person.name}' was already removed from server`)
-        setIsError(true)
-        setTimeout(() => {
-          setMessage(null)
-        }, 5000)
+        showMessage(true, `'${person.name}' was already removed from server`)
         // Update list
         const newPersonList = persons.filter(p => p.id !== person.id)
         setPersons(newPersonList)
@@ -102,7 +101,7 @@ const App = () => {
     <div>
       <h1>Phonebook- Deployment</h1>
 
-      <Notification message={message} isError={isError}/>
+      <Notification message={message} isError={isError} />
 
       <Filter
         handleFilterChange={handleFilterChange}
